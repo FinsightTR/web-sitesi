@@ -8,6 +8,11 @@ function getValue(formData: FormData, key: string) {
 
 export async function POST(request: Request) {
   const formData = await request.formData();
+
+  if (getValue(formData, "website")) {
+    return NextResponse.json({ ok: true, message: "Mesajınız FinCity ekibine iletildi." });
+  }
+
   const missing = requiredFields.filter((field) => !getValue(formData, field));
 
   if (missing.length > 0) {
