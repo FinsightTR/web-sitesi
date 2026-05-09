@@ -1,3 +1,7 @@
+"use client";
+
+import { FormEvent, useState } from "react";
+
 const interests = [
   "Budget & Performance Portal",
   "Finansal Raporlama",
@@ -6,9 +10,59 @@ const interests = [
   "Sözleşme ve Fiyatlandırma Desteği",
 ];
 
+type FormStatus = {
+  type: "idle" | "success" | "error";
+  message: string;
+};
+
 export function ContactForm() {
+  const [status, setStatus] = useState<FormStatus>({ type: "idle", message: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setIsSubmitting(true);
+    setStatus({ type: "idle", message: "" });
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        body: formData,
+      });
+      const data = (await response.json()) as { ok?: boolean; message?: string };
+
+      if (!response.ok || !data.ok) {
+        setStatus({
+          type: "error",
+          message: data.message ?? "Mesaj gönderilemedi. Lütfen daha sonra tekrar deneyin.",
+        });
+        return;
+      }
+
+      setStatus({ type: "success", message: data.message ?? "Mesajınız FinCity ekibine iletildi." });
+      form.reset();
+    } catch {
+      setStatus({
+        type: "error",
+        message: "Bağlantı sırasında bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
   return (
-    <form action="/api/contact" method="post" className="rounded-3xl border border-slate-200 bg-white p-6 shadow-xl shadow-slate-200/70">
+    <form onSubmit={handleSubmit} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-xl shadow-slate-200/70">
+      <div className="hidden" aria-hidden="true">
+        <label>
+          Website
+          <input name="website" tabIndex={-1} autoComplete="off" />
+        </label>
+      </div>
+
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="grid gap-2 text-sm font-semibold text-slate-700">
           Ad Soyad
@@ -37,9 +91,18 @@ export function ContactForm() {
         Mesaj
         <textarea required name="message" rows={5} className="rounded-2xl border border-slate-300 px-4 py-3 font-normal outline-none focus:border-blue-500" />
       </label>
-      <button type="submit" className="mt-5 w-full rounded-full bg-blue-700 px-5 py-3 text-sm font-bold text-white hover:bg-blue-800">
-        Mesajı Gönder
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="mt-5 w-full rounded-full bg-blue-700 px-5 py-3 text-sm font-bold text-white transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:bg-slate-400"
+      >
+        {isSubmitting ? "Gönderiliyor..." : "Mesajı Gönder"}
       </button>
+      {status.message ? (
+        <p className={`mt-3 rounded-2xl px-4 py-3 text-sm ${status.type === "success" ? "bg-emerald-50 text-emerald-700" : "bg-red-50 text-red-700"}`}>
+          {status.message}
+        </p>
+      ) : null}
       <p className="mt-3 text-xs leading-5 text-slate-500">
         Form otomatik cevap göndermez. Mail provider yapılandırıldığında mesajınız yasin@fincity.com.tr adresine iletilir.
       </p>
