@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { legalLinks, legalPages, legalPlaceholderNotice } from "@/lib/content";
+import { legalLinks, legalPages } from "@/lib/content";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -26,9 +26,6 @@ export default async function LegalPage({ params }: PageProps) {
       <div className="mt-8 rounded-3xl border border-zinc-200 bg-white p-8 shadow-sm">
         <div className="space-y-5 leading-8 text-zinc-600">
           {page.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
-        </div>
-        <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm font-medium leading-6 text-amber-950">
-          {legalPlaceholderNotice}
         </div>
       </div>
     </section>
