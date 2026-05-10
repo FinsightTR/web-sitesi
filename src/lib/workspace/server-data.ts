@@ -14,7 +14,7 @@ type DbModule = {
 type CompanyModuleRow = {
   is_enabled: boolean;
   external_url: string | null;
-  modules: DbModule | null;
+  modules: DbModule | DbModule[] | null;
 };
 
 type PermissionRow = {
@@ -45,6 +45,14 @@ type WorkspaceContext = {
   tasks: Array<{ id: string; title: string; status: string; due_date: string | null }>;
   documents: Array<{ id: string; title: string; created_at: string }>;
 };
+
+function firstOrNull<T>(value: T | T[] | null | undefined): T | null {
+  if (Array.isArray(value)) {
+    return value[0] ?? null;
+  }
+
+  return value ?? null;
+}
 
 export async function getWorkspaceContext(): Promise<WorkspaceContext | { error: string }> {
   const supabase = await createClient();
@@ -78,7 +86,11 @@ export async function getWorkspaceContext(): Promise<WorkspaceContext | { error:
   }
 
   const role = membership.role as Role;
-  const company = Array.isArray(membership.companies) ? membership.companies[0] : membership.companies;
+  const company = firstOrNull(membership.companies);
+
+  if (!company) {
+    return { error: "Çalışma alanı yetkiniz henüz tanımlanmamış." };
+  }
 
   const [{ data: companyModules }, { data: rolePermissions }, { data: tasks }, { data: documents }] = await Promise.all([
     supabase
@@ -103,7 +115,7 @@ export async function getWorkspaceContext(): Promise<WorkspaceContext | { error:
   ]);
 
   const permissions = (rolePermissions ?? []) as PermissionRow[];
-  const rows = (companyModules ?? []) as CompanyModuleRow[];
+  const rows = (companyModules ?? []) as unknown as CompanyModuleRow[];
 
   return {
     profile,
@@ -112,7 +124,7 @@ export async function getWorkspaceContext(): Promise<WorkspaceContext | { error:
     roleLabel: roleLabels[role] ?? role,
     permissions,
     modules: rows.map((row) => {
-      const workspaceModule = row.modules;
+      const workspaceModule = firstOrNull(row.modules);
       const permission = workspaceModule ? permissions.find((item) => item.module_id === workspaceModule.id) : undefined;
       const externalUrl = row.external_url ?? workspaceModule?.external_url ?? process.env.NEXT_PUBLIC_MALI_MUSAVIRLIK_URL ?? undefined;
 
