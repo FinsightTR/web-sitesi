@@ -62,8 +62,8 @@ export default async function PermissionsPage() {
         <article className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm">
           <h2 className="text-xl font-bold text-zinc-950">Aktif modüller</h2>
           <div className="mt-5 flex flex-wrap gap-2">
-            {context.modules.filter((module) => module.canView).map((module) => (
-              <span className="rounded-full bg-zinc-100 px-3 py-1 text-sm font-semibold text-zinc-700" key={module.id}>{module.name}</span>
+            {context.modules.filter((workspaceModule) => workspaceModule.canView).map((workspaceModule) => (
+              <span className="rounded-full bg-zinc-100 px-3 py-1 text-sm font-semibold text-zinc-700" key={workspaceModule.id}>{workspaceModule.name}</span>
             ))}
           </div>
         </article>
@@ -81,10 +81,10 @@ export default async function PermissionsPage() {
             </thead>
             <tbody>
               {context.permissions.map((row) => {
-                const module = context.modules.find((item) => item.id === row.module_id);
+                const workspaceModule = context.modules.find((item) => item.id === row.module_id);
                 return (
                   <tr className="border-b border-zinc-100" key={row.module_id}>
-                    <td className="py-4 pr-4 font-semibold text-zinc-950">{module?.name ?? row.module_id}</td>
+                    <td className="py-4 pr-4 font-semibold text-zinc-950">{workspaceModule?.name ?? row.module_id}</td>
                     {actions.map(([action]) => (
                       <td className="py-4 pr-4" key={action}>
                         <span className={`rounded-full px-3 py-1 text-xs font-bold ${row[action] ? "bg-emerald-50 text-emerald-700" : "bg-zinc-100 text-zinc-400"}`}>
