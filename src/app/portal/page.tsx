@@ -35,7 +35,9 @@ export default async function PortalPage() {
             <p className="text-xs uppercase tracking-[0.22em] text-zinc-400">Kullanıcı</p>
             <p className="mt-2 text-xl font-bold text-white">{context.profile.full_name}</p>
             <p className="mt-1 text-sm text-zinc-300">{context.roleLabel}</p>
-            <a className="mt-4 inline-flex rounded-full bg-white px-4 py-2 text-xs font-bold text-zinc-950" href="/api/auth/logout">Çıkış Yap</a>
+            <a className="mt-4 inline-flex rounded-full border border-white/20 bg-white px-4 py-2 text-xs font-bold text-zinc-950 shadow-sm transition hover:bg-zinc-100" href="/api/auth/logout">
+              Çıkış Yap
+            </a>
           </div>
         </div>
       </section>
