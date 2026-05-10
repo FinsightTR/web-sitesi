@@ -112,15 +112,15 @@ export async function getWorkspaceContext(): Promise<WorkspaceContext | { error:
     roleLabel: roleLabels[role] ?? role,
     permissions,
     modules: rows.map((row) => {
-      const module = row.modules;
-      const permission = module ? permissions.find((item) => item.module_id === module.id) : undefined;
-      const externalUrl = row.external_url ?? module?.external_url ?? process.env.NEXT_PUBLIC_MALI_MUSAVIRLIK_URL ?? undefined;
+      const workspaceModule = row.modules;
+      const permission = workspaceModule ? permissions.find((item) => item.module_id === workspaceModule.id) : undefined;
+      const externalUrl = row.external_url ?? workspaceModule?.external_url ?? process.env.NEXT_PUBLIC_MALI_MUSAVIRLIK_URL ?? undefined;
 
       return {
-        id: module?.id ?? "dashboard",
-        name: module?.name ?? "Modül",
-        description: module?.description ?? "Çalışma alanı modülü.",
-        kind: module?.kind ?? "internal",
+        id: workspaceModule?.id ?? "dashboard",
+        name: workspaceModule?.name ?? "Modül",
+        description: workspaceModule?.description ?? "Çalışma alanı modülü.",
+        kind: workspaceModule?.kind ?? "internal",
         isEnabled: row.is_enabled,
         externalUrl,
         canView: Boolean(permission?.can_view),
