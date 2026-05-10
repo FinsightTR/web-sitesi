@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 const requiredFields = ["name", "company", "email", "message"];
+const publicFailureMessage = "Mesajınız şu anda iletilemedi. Lütfen daha sonra tekrar deneyin.";
 
 function getValue(formData: FormData, key: string) {
   return String(formData.get(key) ?? "").trim();
@@ -27,7 +28,6 @@ export async function POST(request: Request) {
     `Ad Soyad: ${getValue(formData, "name")}`,
     `Şirket: ${getValue(formData, "company")}`,
     `E-posta: ${getValue(formData, "email")}`,
-    `Telefon: ${getValue(formData, "phone") || "Belirtilmedi"}`,
     `Hizmet ilgisi: ${getValue(formData, "interest") || "Belirtilmedi"}`,
     "",
     getValue(formData, "message"),
@@ -44,7 +44,7 @@ export async function POST(request: Request) {
     });
 
     if (!response.ok) {
-      return NextResponse.json({ ok: false, message: "Mail provider mesajı kabul etmedi." }, { status: 502 });
+      return NextResponse.json({ ok: false, message: publicFailureMessage }, { status: 502 });
     }
 
     return NextResponse.json({ ok: true, message: "Mesajınız FinCity ekibine iletildi." });
@@ -67,18 +67,11 @@ export async function POST(request: Request) {
     });
 
     if (!response.ok) {
-      return NextResponse.json({ ok: false, message: "Mail provider mesajı kabul etmedi." }, { status: 502 });
+      return NextResponse.json({ ok: false, message: publicFailureMessage }, { status: 502 });
     }
 
     return NextResponse.json({ ok: true, message: "Mesajınız FinCity ekibine iletildi." });
   }
 
-  return NextResponse.json(
-    {
-      ok: false,
-      message: "Mail provider henüz yapılandırılmadı. Mesaj hedef adresi hazır: " + to,
-      requiredEnv: ["CONTACT_TO_EMAIL", "CONTACT_FROM_EMAIL", "CONTACT_PROVIDER", "RESEND_API_KEY veya SENDGRID_API_KEY"],
-    },
-    { status: 503 },
-  );
+  return NextResponse.json({ ok: false, message: publicFailureMessage }, { status: 503 });
 }
