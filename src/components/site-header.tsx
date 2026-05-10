@@ -16,7 +16,7 @@ export function SiteHeader() {
           ))}
         </div>
         <div className="hidden md:block">
-          <Button href="/login" variant="secondary" className="border-zinc-900 bg-zinc-950 text-white hover:border-zinc-800 hover:bg-zinc-800 hover:text-white">
+          <Button href="/login" variant="primary" className="!text-white hover:!text-white">
             Çalışma Alanına Geç
           </Button>
         </div>
