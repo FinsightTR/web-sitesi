@@ -10,16 +10,15 @@ export default function ContactPage() {
       <div>
         <SectionHeading
           eyebrow="İletişim"
-          title="Finansal yönetim ihtiyaçlarınızı birlikte değerlendirelim"
-          description="Form gönderimleri otomatik cevap üretmez. Güvenli mail provider yapılandırıldığında mesajlar yasin@fincity.com.tr adresine iletilir."
+          title="FinCity ile çalışma fırsatlarını birlikte değerlendirelim"
+          description="Finansal raporlama, Teknokent, Ar-Ge, teşvik, dijital portal ve danışmanlık ihtiyaçlarınız için formu doldurun. Ekibimiz talebinizi değerlendirerek sizinle iletişime geçecektir."
         />
-        <div className="mt-8 rounded-3xl bg-slate-950 p-6 text-white">
-          <p className="font-semibold">Kurulum için gerekli environment variable listesi</p>
-          <ul className="mt-4 grid gap-2 text-sm text-slate-300">
-            <li>CONTACT_TO_EMAIL=yasin@fincity.com.tr</li>
-            <li>CONTACT_FROM_EMAIL=noreply@fincity.com.tr</li>
-            <li>CONTACT_PROVIDER=resend veya sendgrid</li>
-            <li>RESEND_API_KEY veya SENDGRID_API_KEY</li>
+        <div className="mt-8 rounded-3xl bg-zinc-950 p-6 text-white shadow-xl shadow-zinc-950/10">
+          <p className="font-semibold text-white">Nasıl ilerliyoruz?</p>
+          <ul className="mt-4 grid gap-3 text-sm leading-6 text-zinc-200">
+            <li>Talebinizi form üzerinden alıyoruz.</li>
+            <li>İhtiyaç alanınızı finans, teşvik, Teknokent, Ar-Ge veya dijital çözüm başlığı altında değerlendiriyoruz.</li>
+            <li>Uygun kapsam için sizinle e-posta üzerinden iletişime geçiyoruz.</li>
           </ul>
         </div>
       </div>
