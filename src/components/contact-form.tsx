@@ -3,11 +3,15 @@
 import { FormEvent, useState } from "react";
 
 const interests = [
+  "Teknokent Yönetim Danışmanlığı",
+  "Ar-Ge & Tasarım Merkezi Danışmanlığı",
+  "TÜBİTAK Proje Danışmanlığı",
+  "KOSGEB Proje Danışmanlığı",
   "Budget & Performance Portal",
-  "Finansal Raporlama",
-  "Teknokent ve Ar-Ge Danışmanlığı",
-  "AI Destekli İş Yönetimi",
-  "Sözleşme ve Fiyatlandırma Desteği",
+  "Finansal Raporlama ve Muhasebe",
+  "Vergi Danışmanlığı",
+  "Dijital Hizmetler",
+  "Mali Müşavirlik Süreçleri ve Finans Operasyonları",
 ];
 
 type FormStatus = {
@@ -37,7 +41,7 @@ export function ContactForm() {
       if (!response.ok || !data.ok) {
         setStatus({
           type: "error",
-          message: data.message ?? "Mesaj gönderilemedi. Lütfen daha sonra tekrar deneyin.",
+          message: data.message ?? "Mesajınız şu anda iletilemedi. Lütfen daha sonra tekrar deneyin.",
         });
         return;
       }
@@ -47,7 +51,7 @@ export function ContactForm() {
     } catch {
       setStatus({
         type: "error",
-        message: "Bağlantı sırasında bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+        message: "Mesajınız şu anda iletilemedi. Lütfen daha sonra tekrar deneyin.",
       });
     } finally {
       setIsSubmitting(false);
@@ -72,15 +76,11 @@ export function ContactForm() {
           Şirket
           <input required name="company" className="rounded-2xl border border-zinc-300 px-4 py-3 font-normal outline-none focus:border-[#b88a2a]" />
         </label>
-        <label className="grid gap-2 text-sm font-semibold text-zinc-700">
-          E-posta
-          <input required type="email" name="email" className="rounded-2xl border border-zinc-300 px-4 py-3 font-normal outline-none focus:border-[#b88a2a]" />
-        </label>
-        <label className="grid gap-2 text-sm font-semibold text-zinc-700">
-          Telefon
-          <input name="phone" className="rounded-2xl border border-zinc-300 px-4 py-3 font-normal outline-none focus:border-[#b88a2a]" />
-        </label>
       </div>
+      <label className="mt-4 grid gap-2 text-sm font-semibold text-zinc-700">
+        E-posta
+        <input required type="email" name="email" className="rounded-2xl border border-zinc-300 px-4 py-3 font-normal outline-none focus:border-[#b88a2a]" />
+      </label>
       <label className="mt-4 grid gap-2 text-sm font-semibold text-zinc-700">
         Hizmet ilgisi
         <select name="interest" className="rounded-2xl border border-zinc-300 px-4 py-3 font-normal outline-none focus:border-[#b88a2a]">
@@ -104,7 +104,7 @@ export function ContactForm() {
         </p>
       ) : null}
       <p className="mt-3 text-xs leading-5 text-zinc-500">
-        Form otomatik cevap göndermez. Mail provider yapılandırıldığında mesajınız yasin@fincity.com.tr adresine iletilir.
+        Form gönderimi otomatik cevap üretmez. Talebiniz değerlendirildikten sonra sizinle e-posta üzerinden iletişime geçilir.
       </p>
     </form>
   );
