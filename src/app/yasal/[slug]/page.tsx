@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { legalLinks } from "@/lib/content";
+import { legalLinks, legalPages, legalPlaceholderNotice } from "@/lib/content";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -10,23 +10,26 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const page = legalLinks.find((item) => item.slug === slug);
-  return { title: page?.label ?? "Yasal" };
+  const page = legalPages[slug as keyof typeof legalPages];
+  return { title: page?.title ?? "Yasal" };
 }
 
 export default async function LegalPage({ params }: PageProps) {
   const { slug } = await params;
-  const page = legalLinks.find((item) => item.slug === slug);
+  const page = legalPages[slug as keyof typeof legalPages];
   if (!page) notFound();
 
   return (
     <section className="mx-auto max-w-4xl px-4 py-20 sm:px-6 lg:px-8">
-      <p className="text-sm font-bold uppercase tracking-[0.28em] text-blue-700">Yasal Bilgilendirme</p>
-      <h1 className="mt-4 text-4xl font-black text-slate-950">{page.label}</h1>
-      <div className="mt-8 rounded-3xl border border-slate-200 bg-white p-8 leading-8 text-slate-600 shadow-sm">
-        <p>
-          Bu sayfa, FinCity web sitesi için hazırlanmış placeholder yasal bilgilendirme alanıdır. Nihai metinler hukuk ve uyum değerlendirmesi sonrasında güncellenmelidir.
-        </p>
+      <p className="text-sm font-bold uppercase tracking-[0.28em] text-[#8a6418]">Yasal Bilgilendirme</p>
+      <h1 className="mt-4 text-4xl font-black text-zinc-950">{page.title}</h1>
+      <div className="mt-8 rounded-3xl border border-zinc-200 bg-white p-8 shadow-sm">
+        <div className="space-y-5 leading-8 text-zinc-600">
+          {page.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+        </div>
+        <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm font-medium leading-6 text-amber-950">
+          {legalPlaceholderNotice}
+        </div>
       </div>
     </section>
   );

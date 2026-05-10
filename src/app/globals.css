@@ -1,11 +1,12 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
-  --navy: #0b1f3a;
-  --blue: #1d4ed8;
-  --cyan: #06b6d4;
+  --background: #f7f7f5;
+  --foreground: #18181b;
+  --ink: #111827;
+  --graphite: #27272a;
+  --surface: #f4f4f2;
+  --accent: #b88a2a;
 }
 
 * { box-sizing: border-box; }
@@ -19,11 +20,4 @@ body {
 
 a { color: inherit; text-decoration: none; }
 
-::selection { background: rgba(29, 78, 216, 0.18); }
-
-.bg-grid {
-  background-image:
-    linear-gradient(rgba(15, 23, 42, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(15, 23, 42, 0.06) 1px, transparent 1px);
-  background-size: 28px 28px;
-}
+::selection { background: rgba(184, 138, 42, 0.22); }
