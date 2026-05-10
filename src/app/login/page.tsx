@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { BrandLogo } from "@/components/brand-logo";
+import { WorkspaceLoginForm } from "@/components/workspace-login-form";
 
 export const metadata: Metadata = { title: "FinCity Yönetim ve Çalışma Alanı" };
 
@@ -41,28 +42,7 @@ export default function LoginPage() {
             ))}
           </div>
         </div>
-        <form className="rounded-[2rem] border border-zinc-200 bg-white p-8 shadow-2xl shadow-zinc-950/10">
-          <div className="mb-8 border-b border-zinc-200 pb-6">
-            <p className="text-sm font-bold uppercase tracking-[0.22em] text-zinc-500">Supabase Auth hazırlığı</p>
-            <h2 className="mt-3 text-2xl font-bold text-zinc-950">Çalışma alanı girişi</h2>
-            <p className="mt-2 text-sm leading-6 text-zinc-600">Bu tasarım Supabase Auth’a hazırdır; gerçek kullanıcı oluşturma sonraki fazda etkinleştirilecektir.</p>
-          </div>
-          <label className="grid gap-2 text-sm font-semibold text-zinc-700">
-            E-posta
-            <input type="email" placeholder="kullanici@firma.com" autoComplete="email" className="rounded-2xl border border-zinc-300 bg-white px-4 py-3 font-normal text-zinc-950 outline-none focus:border-[#b88a2a]" />
-          </label>
-          <label className="mt-4 grid gap-2 text-sm font-semibold text-zinc-700">
-            Şifre
-            <input type="password" placeholder="••••••••" autoComplete="current-password" className="rounded-2xl border border-zinc-300 bg-white px-4 py-3 font-normal text-zinc-950 outline-none focus:border-[#b88a2a]" />
-          </label>
-          <button type="button" className="mt-6 w-full rounded-full bg-zinc-950 px-5 py-3 text-sm font-bold text-white transition hover:bg-zinc-800">
-            Giriş Yap
-          </button>
-          <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-xs text-zinc-500">
-            <span>Hesap erişimi için FinCity ile iletişime geçin.</span>
-            <span className="font-semibold text-zinc-700">Şifremi unuttum</span>
-          </div>
-        </form>
+        <WorkspaceLoginForm />
       </div>
     </section>
   );
