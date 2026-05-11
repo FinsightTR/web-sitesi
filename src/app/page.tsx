@@ -1,12 +1,22 @@
 import { Button } from "@/components/button";
 import { FeatureCard } from "@/components/cards";
+import { HomeHero } from "@/components/home-hero";
 import { PortalMockup } from "@/components/portal-mockup";
 import { SectionHeading } from "@/components/section-heading";
 import { insights, services } from "@/lib/content";
+import { createClient } from "@/lib/supabase/server";
 
-export default function Home() {
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+  const supabase = await createClient();
+  const { data: { user } } = supabase ? await supabase.auth.getUser() : { data: { user: null } };
+  const workspaceHref = user ? "/portal" : "/login";
+
   return (
     <>
+      <HomeHero workspaceHref={workspaceHref} />
+
       <section className="relative overflow-hidden bg-[linear-gradient(135deg,#ffffff_0%,#f7f7f5_55%,#eeeeeb_100%)]">
         <div className="absolute -right-24 top-16 h-72 w-72 rounded-full bg-[#b88a2a]/15 blur-3xl" aria-hidden="true" />
         <div className="absolute left-1/2 top-0 h-px w-[42rem] -translate-x-1/2 bg-gradient-to-r from-transparent via-[#b88a2a]/35 to-transparent" aria-hidden="true" />
