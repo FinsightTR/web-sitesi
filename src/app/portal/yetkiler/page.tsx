@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getWorkspaceContext } from "@/lib/workspace/server-data";
 
 export const metadata: Metadata = { title: "Kullanıcı ve Yetkiler" };
+export const dynamic = "force-dynamic";
 
 const actions = [
   ["can_view", "Görüntüleme"],

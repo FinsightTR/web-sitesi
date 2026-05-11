@@ -1,8 +1,23 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getWorkspaceContext } from "@/lib/workspace/server-data";
+import { modulePageHrefById } from "@/lib/workspace/module-pages";
+import type { ModuleKey } from "@/lib/workspace/types";
 
 export const metadata: Metadata = { title: "FinCity Çalışma Alanı" };
+export const dynamic = "force-dynamic";
+
+function getModuleHref(module: { id: ModuleKey; kind: "internal" | "external"; externalUrl?: string }) {
+  if (module.kind === "external") {
+    return module.externalUrl;
+  }
+
+  if (module.id === "user_management") {
+    return "/portal/yetkiler";
+  }
+
+  return modulePageHrefById[module.id];
+}
 
 export default async function PortalPage() {
   const context = await getWorkspaceContext();
@@ -43,36 +58,46 @@ export default async function PortalPage() {
       </section>
 
       <section className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-        {visibleModules.map((module) => (
-          <article className={`rounded-3xl border p-6 shadow-sm ${module.isEnabled ? "border-zinc-200 bg-white" : "border-zinc-200 bg-zinc-100 opacity-70"}`} key={module.id}>
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <h2 className="text-xl font-bold text-zinc-950">{module.name}</h2>
-                <p className="mt-3 text-sm leading-6 text-zinc-600">{module.description}</p>
+        {visibleModules.map((module) => {
+          const href = module.isEnabled ? getModuleHref(module) : undefined;
+          const statusText = module.kind === "external" && !href ? "Bağlantı yakında tanımlanacak" : "Yeni sekmede aç";
+          const content = (
+            <>
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <h2 className="text-xl font-bold text-zinc-950">{module.name}</h2>
+                  <p className="mt-3 text-sm leading-6 text-zinc-600">{module.description}</p>
+                </div>
+                <span className={`rounded-full px-3 py-1 text-xs font-bold ${module.isEnabled ? "bg-emerald-50 text-emerald-700" : "bg-zinc-200 text-zinc-500"}`}>
+                  {module.isEnabled ? "Aktif" : "Kapalı"}
+                </span>
               </div>
-              <span className={`rounded-full px-3 py-1 text-xs font-bold ${module.isEnabled ? "bg-emerald-50 text-emerald-700" : "bg-zinc-200 text-zinc-500"}`}>
-                {module.isEnabled ? "Aktif" : "Kapalı"}
-              </span>
-            </div>
-            <div className="mt-6">
-              {module.kind === "external" ? (
-                module.externalUrl ? (
-                  <a className="text-sm font-bold text-zinc-950 underline decoration-[#b88a2a] decoration-2 underline-offset-4" href={module.externalUrl} target="_blank" rel="noreferrer">
-                    Mali Müşavirlik Sistemine Git
-                  </a>
-                ) : (
-                  <p className="text-sm font-semibold text-zinc-500">Bağlantı yakında tanımlanacak</p>
-                )
-              ) : module.id === "user_management" ? (
-                <Link className="text-sm font-bold text-zinc-950 underline decoration-[#b88a2a] decoration-2 underline-offset-4" href="/portal/yetkiler">
-                  Yetki Matrisi
-                </Link>
-              ) : (
-                <p className="text-sm font-semibold text-zinc-500">Modül sayfası sonraki fazda etkinleştirilecek</p>
-              )}
-            </div>
-          </article>
-        ))}
+              <p className={`mt-6 text-sm font-bold ${href ? "text-zinc-950 underline decoration-[#b88a2a] decoration-2 underline-offset-4" : "text-zinc-500"}`}>
+                {module.isEnabled ? statusText : "Bu modül şirketiniz için kapalı"}
+              </p>
+            </>
+          );
+
+          if (!href) {
+            return (
+              <article className="rounded-3xl border border-zinc-200 bg-zinc-100 p-6 opacity-80 shadow-sm" key={module.id}>
+                {content}
+              </article>
+            );
+          }
+
+          return (
+            <a
+              className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-[#d7b66a] hover:shadow-lg"
+              href={href}
+              key={module.id}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {content}
+            </a>
+          );
+        })}
       </section>
 
       <section className="mt-10 grid gap-5 lg:grid-cols-2">

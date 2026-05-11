@@ -27,7 +27,7 @@ type PermissionRow = {
   can_manage: boolean;
 };
 
-type WorkspaceContext = {
+export type WorkspaceContext = {
   profile: { id: string; full_name: string; email: string };
   company: { id: string; name: string };
   membership: { role: Role };
